@@ -14,7 +14,7 @@ router.post(
 );
 // GET API /api/student/
 router.get(
-  "/",
+  "",
   authMiddleware,
   roleMiddleware(["admin"]),
   studentController.gettAllStudents
