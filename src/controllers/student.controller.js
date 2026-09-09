@@ -66,11 +66,19 @@ const createStudent = async (req, res) => {
 };
 
 const gettAllStudents = async (req, res) => {
+  //Pagination implimentation
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 5
+  // formula of pagination
+  const skip = (page -1)*limit
+
   try {
-    const students = await studentModel.find();
+    const students = await studentModel.find().skip(skip).limit(limit);
     return res.status(200).json({
       message: "Student fetched successfull",
-      students,
+      page,
+      limit,
+      students
     });
   } catch (err) {
     console.log(err);
