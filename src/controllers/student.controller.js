@@ -1,6 +1,6 @@
 const studentModel = require("../models/student.model");
 
-const createStudent = async (req, res) => {
+const createStudent = async (req, res, next) => {
   const {
     studentId,
     name,
@@ -60,12 +60,11 @@ const createStudent = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server internal error" });
+    next(err);
   }
 };
 
-const gettAllStudents = async (req, res) => {
+const gettAllStudents = async (req, res, next) => {
   const { sortBy, order } = req.query;
 
   //implimentation of search operation
@@ -116,12 +115,11 @@ const gettAllStudents = async (req, res) => {
       students,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server internal error" });
+    next(err);
   }
 };
 
-const getStudentById = async (req, res) => {
+const getStudentById = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -138,12 +136,11 @@ const getStudentById = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server inernal error" });
+    next(err);
   }
 };
 
-const updateStudent = async (req, res) => {
+const updateStudent = async (req, res, next) => {
   const updatedValue = req.body;
   const { id } = req.params;
 
@@ -161,12 +158,11 @@ const updateStudent = async (req, res) => {
       .status(200)
       .json({ message: "Data successfully updated", student });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server internal error" });
+    next(err);
   }
 };
 
-const deleteStudentById = async (req, res) => {
+const deleteStudentById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const student = await studentModel.findByIdAndDelete(id);
@@ -178,8 +174,7 @@ const deleteStudentById = async (req, res) => {
       student,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Server internal error" });
+    next(err);
   }
 };
 

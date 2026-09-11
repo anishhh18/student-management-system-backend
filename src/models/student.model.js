@@ -19,11 +19,14 @@ const studentSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
     phone: {
       type: String,
       required: true,
       trim: true,
+      minlength: 10,
+  maxlength: 10,
     },
     dateOfBirth: {
       type: Date,
