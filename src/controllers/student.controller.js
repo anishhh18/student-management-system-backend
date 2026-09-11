@@ -66,6 +66,8 @@ const createStudent = async (req, res) => {
 };
 
 const gettAllStudents = async (req, res) => {
+  const { sortBy, order } = req.query;
+
   //implimentation of search operation
   const { search } = req.query;
   const filter = {};
@@ -95,8 +97,18 @@ const gettAllStudents = async (req, res) => {
   const limit = Number(req.query.limit) || 5;
   // formula of pagination
   const skip = (page - 1) * limit;
+  //sorting
+  const sort = {};
+
+  if (sortBy) {
+    sort[sortBy] = order === "desc" ? -1 : 1;
+  }
   try {
-    const students = await studentModel.find(filter).skip(skip).limit(limit);
+    const students = await studentModel
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit);
     return res.status(200).json({
       message: "Student fetched successfull",
       page,
