@@ -49,6 +49,7 @@ const getAllTeacher = async (req,res)=>{
   }
   //sorting
   const { sortBy, order } = req.query;
+  const sort = {}
   if (sortBy) {
     sort[sortBy] = order === "desc" ? -1 : 1;
   }
@@ -58,7 +59,7 @@ const getAllTeacher = async (req,res)=>{
     filter.department = department;
   }
   try{
-    const teacher = await teacherModel.find(filter).skip(skip).limit(limit)
+    const teacher = await teacherModel.find(filter).sort(sort).skip(skip).limit(limit)
     res.status(200).json({message:"teacher fetch successfully",page,limit,teacher})
   }catch{
     console.log(err)
