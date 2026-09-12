@@ -65,5 +65,49 @@ const getAllTeacher = async (req,res)=>{
   }
 }
 
+const getTeacherById = async (req,res)=>{
+  const {id} = req.params
+  try{
+    const teacher = await teacherModel.findById(id)
+    if(!teacher){
+      return res.status(404).json({message:"Teacher not found"})
+    }
+    return res.status(200).json({message:"Teacher Fetched Successfully",teacher})
+  }catch(err){
+    console.log(err)
+  }
+}
 
-module.exports = {createTeacher,getAllTeacher}
+const updateTeacher = async (req,res)=>{
+  const updatedValue = req.body
+  const {id} = req.params
+  try{
+    const teacher = await teacherModel.findByIdAndUpdate(id,updatedValue,{
+      returnDocument: "after",
+      runValidators: true,
+    })
+    if(!teacher){
+      return res.status(404).json({message:"Teacher not found"})
+    }
+    return res.status(200).json({message:"Teacher Updated Successfully",teacher})
+  }catch(err){
+    console.log(err)
+  }
+}
+
+const deleteTeacherById = async (req,res)=>{
+  const {id} = req.params
+  try{
+    const teacher = await teacherModel.findByIdAndDelete(id)
+    if(!teacher){
+      return res.status(404).json({message:"Teacher not found"})
+    }
+    return res.status(200).json({
+      message: "Teacher deleted successfully",
+      teacher,
+    });
+  }catch(err){
+    console.log(err)
+  }
+}
+module.exports = {createTeacher,getAllTeacher,getTeacherById,updateTeacher,deleteTeacherById}

@@ -19,27 +19,27 @@ router.get(
   roleMiddleware(["admin"]),
   teacherController.getAllTeacher
 );
-// // GET API /api/student/:id
-// router.get(
-//   "/:id",
-//   authMiddleware,
-//   roleMiddleware(["admin"]),
-//   studentController.getStudentById
-// );
-// // GET API /api/student/update/:id
-// router.put(
-//   "/update/:id",
-//   authMiddleware,
-//   roleMiddleware(["admin"]),
-//   studentController.updateStudent
-// );
-// // GET API /api/student/delete/:id
-// router.delete(
-//   "/delete/:id",
-//   authMiddleware,
-//   roleMiddleware(["admin"]),
-//   studentController.deleteStudentById
-// );
+// GET API /api/teacher/:id
+router.get(
+  "/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  teacherController.getTeacherById
+);
+// GET API /api/teacher/update/:id
+router.put(
+  "/update/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  teacherController.updateTeacher
+);
+// GET API /api/teacher/delete/:id
+router.delete(
+  "/delete/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  teacherController.deleteTeacherById
+);
 
 
 module.exports = router;
