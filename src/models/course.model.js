@@ -22,7 +22,7 @@ const courseSchema = new mongoose.Schema({
 });
 
 
-const cousreModel = mongoose.model("course",courseSchema)
+const cousreModel = mongoose.model("courses",courseSchema)
 
 
 module.exports = cousreModel;

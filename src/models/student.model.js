@@ -26,7 +26,7 @@ const studentSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 10,
-  maxlength: 10,
+      maxlength: 10,
     },
     dateOfBirth: {
       type: Date,
@@ -43,9 +43,9 @@ const studentSchema = new mongoose.Schema(
       trim: true,
     },
     course: {
-      type: String,
-      required: true,
-      trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "courses",
+      required: true
     },
     department: {
       type: String,
@@ -64,7 +64,7 @@ const studentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const studentModel = mongoose.model("student", studentSchema);

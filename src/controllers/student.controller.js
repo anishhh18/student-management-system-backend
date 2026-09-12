@@ -105,6 +105,7 @@ const gettAllStudents = async (req, res, next) => {
   try {
     const students = await studentModel
       .find(filter)
+      .populate("course")
       .sort(sort)
       .skip(skip)
       .limit(limit);
@@ -123,7 +124,7 @@ const getStudentById = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const student = await studentModel.findById(id);
+    const student = await studentModel.findById(id).populate("course");
     return res.status(200).json({
       message: "Student fetched",
       student: {
@@ -148,7 +149,7 @@ const updateStudent = async (req, res, next) => {
     const student = await studentModel.findByIdAndUpdate(id, updatedValue, {
       returnDocument: "after",
       runValidators: true,
-    });
+    }).populate("course");
     if (!student) {
       return res.status(404).json({
         message: "Student not found",
