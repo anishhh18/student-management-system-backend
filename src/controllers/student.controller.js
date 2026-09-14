@@ -1,63 +1,12 @@
-const studentModel = require("../models/student.model");
+const studentServices = require("../services/student.service");
 
 const createStudent = async (req, res, next) => {
-  const {
-    studentId,
-    name,
-    email,
-    phone,
-    dateOfBirth,
-    gender,
-    address,
-    course,
-    department,
-    enrollmentDate,
-    status,
-  } = req.body;
-
   try {
-    const isExists = await studentModel.findOne({
-      $or: [{ studentId }, { email }],
-    });
-
-    if (isExists) {
-      return res.status(409).json({
-        message: "Student already exists",
-        student: {
-          studentId,
-          name,
-          course,
-          department,
-          enrollmentDate,
-          status,
-        },
-      });
-    }
-
-    const student = await studentModel.create({
-      studentId,
-      name,
-      email,
-      phone,
-      dateOfBirth,
-      gender,
-      address,
-      course,
-      department,
-      enrollmentDate,
-      status,
-    });
+    const student = await studentServices.createStudent(req.body);
 
     return res.status(201).json({
       message: "Registration Successfull",
-      student: {
-        studentId,
-        name,
-        course,
-        department,
-        enrollmentDate,
-        status,
-      },
+      student,
     });
   } catch (err) {
     next(err);
@@ -65,54 +14,10 @@ const createStudent = async (req, res, next) => {
 };
 
 const gettAllStudents = async (req, res, next) => {
-  const { sortBy, order } = req.query;
-
-  //implimentation of search operation
-  const { search } = req.query;
-  const filter = {};
-  if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { email: { $regex: search, $options: "i" } },
-      { studentId: { $regex: search, $options: "i" } },
-    ];
-  }
-  //implimentation of filter
-  const { course, department, gender, status } = req.query;
-  if (course) {
-    filter.course = course;
-  }
-  if (department) {
-    filter.department = department;
-  }
-  if (gender) {
-    filter.gender = gender;
-  }
-  if (status) {
-    filter.status = status;
-  }
-  //Pagination implimentation
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 5;
-  // formula of pagination
-  const skip = (page - 1) * limit;
-  //sorting
-  const sort = {};
-
-  if (sortBy) {
-    sort[sortBy] = order === "desc" ? -1 : 1;
-  }
   try {
-    const students = await studentModel
-      .find(filter)
-      .populate("course")
-      .sort(sort)
-      .skip(skip)
-      .limit(limit);
+    const students = await studentServices.gettAllStudents(req);
     return res.status(200).json({
-      message: "Student fetched successfull",
-      page,
-      limit,
+      message: "Students fetched successfull",
       students,
     });
   } catch (err) {
@@ -121,20 +26,11 @@ const gettAllStudents = async (req, res, next) => {
 };
 
 const getStudentById = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
-    const student = await studentModel.findById(id).populate("course");
+    const student = await studentServices.getStudentById(req);
     return res.status(200).json({
       message: "Student fetched",
-      student: {
-        studentId: student.studentId,
-        name: student.name,
-        course: student.course,
-        department: student.department,
-        enrollmentDate: student.enrollmentDate,
-        status: student.status,
-      },
+      student,
     });
   } catch (err) {
     next(err);
@@ -142,19 +38,8 @@ const getStudentById = async (req, res, next) => {
 };
 
 const updateStudent = async (req, res, next) => {
-  const updatedValue = req.body;
-  const { id } = req.params;
-
   try {
-    const student = await studentModel.findByIdAndUpdate(id, updatedValue, {
-      returnDocument: "after",
-      runValidators: true,
-    }).populate("course");
-    if (!student) {
-      return res.status(404).json({
-        message: "Student not found",
-      });
-    }
+    const student = await studentServices.updateStudent(req);
     return res
       .status(200)
       .json({ message: "Data successfully updated", student });
@@ -164,12 +49,8 @@ const updateStudent = async (req, res, next) => {
 };
 
 const deleteStudentById = async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const student = await studentModel.findByIdAndDelete(id);
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
+    const student = await studentServices.deleteStudentById(req)
     return res.status(200).json({
       message: "Student deleted successfully",
       student,
