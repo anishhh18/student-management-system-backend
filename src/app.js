@@ -5,6 +5,7 @@ const studentRouter = require("./routes/student.route")
 const teacherRouter = require("./routes/teacher.route")
 const courseRouter = require("./routes/course.route")
 const attendenceRouter = require("./routes/attendence.route")
+const examRouter = require("./routes/exam.route")
 const errorMiddleware = require("./middleware/error.middleware")
 const app = express()
 
@@ -16,6 +17,7 @@ app.use("/api/student",studentRouter)
 app.use("/api/teacher",teacherRouter)
 app.use("/api/course",courseRouter)
 app.use("/api/attendence",attendenceRouter)
+app.use("/api/exam",examRouter)
 //centralized error handler
 app.use(errorMiddleware);
 
