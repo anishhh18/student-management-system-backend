@@ -2,7 +2,7 @@ const studentServices = require("../services/student.service");
 
 const createStudent = async (req, res, next) => {
   try {
-    const student = await studentServices.createStudent(req.body);
+    const student = await studentServices.createStudent(req);
 
     return res.status(201).json({
       message: "Registration Successfull",

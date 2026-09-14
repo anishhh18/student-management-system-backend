@@ -1,7 +1,7 @@
 const studentModel = require("../models/student.model");
 
 const createStudent = async (data) => {
-  const { studentId, email } = data;
+  const { studentId, email } = data.body;
   const isExists = await studentModel.findOne({
     $or: [{ studentId }, { email }],
   });

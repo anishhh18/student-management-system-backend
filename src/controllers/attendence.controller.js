@@ -1,140 +1,42 @@
-const attendenceModel = require("../models/attendence.model");
-const studentModel = require("../models/student.model");
-const courseModel = require("../models/course.model");
+const attendenceServices = require("../services/attendence.service")
 
-const createAttendence = async (req, res) => {
-  const { student, course, date, status } = req.body;
+const createAttendence = async (req,res,next) => {
   try {
-    const isExistStudent = await studentModel.findById(student);
-    if (!isExistStudent) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-
-    const isExistCourse = await courseModel.findById(course);
-    if (!isExistCourse) {
-      return res.status(404).json({ message: "Course not found" });
-    }
-
-    const alreadyMarked = await attendenceModel.findOne({
-      student,
-      course,
-      date,
-    });
-
-    if (alreadyMarked) {
-      return res.status(409).json({
-        message: "Attendance already marked for this date",
-      });
-    }
-
-    const attendence = await attendenceModel.create({
-      student,
-      course,
-      date,
-      status,
-    });
-
+    const attendence = await attendenceServices.createAttendence(req)
     return res
       .status(201)
       .json({ message: "Your attendence has been marked", attendence });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 };
 
-const getAttendence = async (req, res) => {
-  //pagination
-  const page = Number(req.query.page) || 1
-  const limit = Number(req.query.limit) || 5
-  const skip = (page -1)*limit
-
-  const filter = {}
-  
-  const {student,course,status,date} = req.query;
-  if (student) {
-    filter.student = student;
-  }
-  if (course) {
-    filter.course = course;
-  }
-  if (status) {
-    filter.status = status;
-  }
-  if (date) {
-    filter.date = date;
-  }
-
+const getAttendence = async (req,res,next) => {
   try {
-    const attendence = await attendenceModel.find(filter).skip(skip).limit(limit);
+    const attendence = await attendenceServices.getAttendence(req)
     return res.status(200).json({ message: "Attendence fetched", attendence });
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 };
 
-const updateStatus = async (req,res)=>{
-  const {id} = req.params
-  const updatedValue = req.body
+const updateStatus = async (req,res,next)=>{
   try{
-    if(updatedValue.status !== "absent" && updatedValue.status !== "present" &&
-      updatedValue.status !== "late"
-     ){
-      return res.status(404).json({message:"Invalid status"})
-     }
-    const attendence = await attendenceModel.findByIdAndUpdate(id,updatedValue,{
-      returnDocument: "after",
-      runValidators: true,
-    })
+    const attendence = await attendenceServices.updateStatus(req)
     return res.status(200).json({message:"Status Updated",attendence})
   }catch(err){
-    console.log(err)
+    next(err)
   }
 }
 
-const getAttendenceSummary = async (req,res)=>{
-  const{id} = req.params
-  const student = await studentModel.findById(id);
+const getAttendenceSummary = async (req,res,next)=>{
   try{
-    if(!student){
-      return res.status(404).json({message:"Student not found"})
-    }
-    // fetch attendence
-    const attendence = await attendenceModel.find({student:id})
-    // status count 
-    let present = 0
-    let absent = 0
-    let late = 0
-
-    attendence.forEach((record) => {
-      if (record.status === "present") {
-        present++;
-      }
-
-      if (record.status === "absent") {
-        absent++;
-      }
-
-      if (record.status === "late") {
-        late++;
-      }
-    });
-
-    const totalClasses = present+absent+late
-
-    const attendencePercentage = totalClasses === 0 ? 0 : ((present + late) / totalClasses) * 100
-
+    const attendence = await attendenceServices.getAttendenceSummary(req)
     return res.status(200).json({
-      student: student.name,
-      totalClasses,
-      present,
-      absent,
-      late,
-      attendancePercentage: Number(
-        attendencePercentage.toFixed(2)
-      ),
+      attendence
     });
   }catch(err){
-    console.log(err)
+    next(err)
   }
 }
 
