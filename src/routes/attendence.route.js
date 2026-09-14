@@ -11,6 +11,8 @@ router.get("",authMiddleware,
   roleMiddleware(["admin"]),attendenceController.getAttendence)
 router.put("/:id",authMiddleware,
   roleMiddleware(["admin"]),attendenceController.updateStatus)
+router.get("/summary/:id",authMiddleware,
+  roleMiddleware(["admin"]),attendenceController.getAttendenceSummary)
 
 
 module.exports = router

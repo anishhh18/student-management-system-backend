@@ -91,5 +91,52 @@ const updateStatus = async (req,res)=>{
   }
 }
 
+const getAttendenceSummary = async (req,res)=>{
+  const{id} = req.params
+  const student = await studentModel.findById(id);
+  try{
+    if(!student){
+      return res.status(404).json({message:"Student not found"})
+    }
+    // fetch attendence
+    const attendence = await attendenceModel.find({student:id})
+    // status count 
+    let present = 0
+    let absent = 0
+    let late = 0
 
-module.exports = { createAttendence,getAttendence,updateStatus };
+    attendence.forEach((record) => {
+      if (record.status === "present") {
+        present++;
+      }
+
+      if (record.status === "absent") {
+        absent++;
+      }
+
+      if (record.status === "late") {
+        late++;
+      }
+    });
+
+    const totalClasses = present+absent+late
+
+    const attendencePercentage = totalClasses === 0 ? 0 : ((present + late) / totalClasses) * 100
+
+    return res.status(200).json({
+      student: student.name,
+      totalClasses,
+      present,
+      absent,
+      late,
+      attendancePercentage: Number(
+        attendencePercentage.toFixed(2)
+      ),
+    });
+  }catch(err){
+    console.log(err)
+  }
+}
+
+
+module.exports = { createAttendence,getAttendence,updateStatus,getAttendenceSummary };
