@@ -45,7 +45,7 @@ const getAllExam = async (req,res)=>{
     filter.exam = exam
   }
   try{
-    const exam = await examModel.find(filter).skip(skip).limit(limit)
+    const exam = await examModel.find(filter).populate("course").skip(skip).limit(limit)
     return res.status(200).json({message:"Exam fetch successfully",page,limit,search,exam})
   }catch(err){
     console.log(err)

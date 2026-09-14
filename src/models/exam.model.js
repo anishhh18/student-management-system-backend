@@ -15,7 +15,7 @@ const examSchema = new mongoose.Schema({
     course: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      trim: true,
+      ref:"courses"
     },
     examDate: {
       type: Date,
