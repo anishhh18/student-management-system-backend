@@ -7,5 +7,7 @@ const router = express.Router()
 
 router.post("/create",authMiddleware,roleMiddleware(["admin"]),examController.createExam)
 router.get("",authMiddleware,roleMiddleware(["admin"]),examController.getAllExam)
+router.get("/:id",authMiddleware,roleMiddleware(["admin"]),examController.getExamById)
+router.put("/update/:id",authMiddleware,roleMiddleware(["admin"]),examController.updateExam)
 
 module.exports = router
