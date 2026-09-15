@@ -1,7 +1,7 @@
 const examModel = require("../models/exam.model");
 
-const createExam = async (data) => {
-  const { examId, name, course, examDate, semester } = data.body;
+const createExam = async (body) => {
+  const { examId, name, course, examDate, semester } = body;
     const isExist = await examModel.findOne({ $or: [{ examId }, { name }] });
     if (isExist) {
       const error = new Error("Exam Details Already Exists")
@@ -18,21 +18,21 @@ const createExam = async (data) => {
     return  exam ;
 };
 
-const getAllExam = async (data) => {
-  const page = Number(data.query.page) || 1;
-  const limit = Number(data.query.limit) || 5;
+const getAllExam = async (query) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 5;
   const skip = (page - 1) * limit;
-  const search = data.query.search;
+  const search = query.search;
   const filter = {};
   if (search) {
     filter.$or = [{ name: { $regex: search, $options: "i" } }];
   }
-  const { sortBy, order } = data.query;
+  const { sortBy, order } = query;
   const sort = {};
   if (sortBy) {
     sort[sortBy] = order === "des" ? -1 : 1;
   }
-  const { course } = data.query;
+  const { course } = query;
   if (course) {
     filter.course = course;
   }
@@ -45,8 +45,8 @@ const getAllExam = async (data) => {
     return exam;
 };
 
-const getExamById = async (data) => {
-  const { id } = data.params;
+const getExamById = async (params) => {
+  const { id } = params;
     const exam = await examModel.findById(id);
     if (!exam) {
       const error = new Error("Exam Details Not Found")
@@ -56,9 +56,9 @@ const getExamById = async (data) => {
     return exam;
 };
 
-const updateExam = async (data) => {
-  const { id } = data.params;
-  const updatedValue = data.body;
+const updateExam = async (body,params) => {
+  const updatedValue = body;
+  const { id } = params;
     const exam = await examModel.findByIdAndUpdate(id, updatedValue, {
       returnDocument: "after",
       runValidators: true,

@@ -1,7 +1,7 @@
 const studentModel = require("../models/student.model");
 
 const createStudent = async (data) => {
-  const { studentId, email } = data.body;
+  const { studentId, email } = data;
   const isExists = await studentModel.findOne({
     $or: [{ studentId }, { email }],
   });
@@ -15,8 +15,8 @@ const createStudent = async (data) => {
 };
 
 const gettAllStudents = async (data) => {
-  const { sortBy, order } = data.query;
-  const { search } = data.query;
+  const { sortBy, order } = data;
+  const { search } = data;
   const filter = {};
   if (search) {
     filter.$or = [
@@ -25,7 +25,7 @@ const gettAllStudents = async (data) => {
       { studentId: { $regex: search, $options: "i" } },
     ];
   }
-  const { course, department, gender, status } = data.query;
+  const { course, department, gender, status } = data;
   if (course) {
     filter.course = course;
   }
@@ -38,8 +38,8 @@ const gettAllStudents = async (data) => {
   if (status) {
     filter.status = status;
   }
-  const page = Number(data.query.page) || 1;
-  const limit = Number(data.query.limit) || 5;
+  const page = Number(data.page) || 1;
+  const limit = Number(data.limit) || 5;
   const skip = (page - 1) * limit;
   const sort = {};
   if (sortBy) {
@@ -60,7 +60,7 @@ const gettAllStudents = async (data) => {
 };
 
 const getStudentById = async (data) => {
-  const { id } = data.params;
+  const { id } = data;
   const student = await studentModel.findById(id).populate("course");
   if (!student) {
     const error = new Error("Student Not Found");
@@ -70,9 +70,9 @@ const getStudentById = async (data) => {
   return student;
 };
 
-const updateStudent = async (data) => {
-  const updatedValue = data.body;
-  const { id } = data.params;
+const updateStudent = async (body,params) => {
+  const updatedValue = body;
+  const { id } = params;
 
   const student = await studentModel
     .findByIdAndUpdate(id, updatedValue, {
@@ -89,7 +89,7 @@ const updateStudent = async (data) => {
 };
 
 const deleteStudentById = async (data) => {
-  const { id } = data.params;
+  const { id } = data;
   const student = await studentModel.findByIdAndDelete(id);
   if (!student) {
     const error = new Error("Student Not Found");

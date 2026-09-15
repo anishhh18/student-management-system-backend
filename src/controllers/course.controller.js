@@ -2,7 +2,7 @@ const courseServices = require("../services/course.service");
 
 const addCourse = async (req, res, next) => {
   try {
-    const course = await courseServices.addCourse(req);
+    const course = await courseServices.addCourse(req.body);
     return res
       .status(201)
       .json({ message: "Course Added Successfully", course });
@@ -13,7 +13,7 @@ const addCourse = async (req, res, next) => {
 
 const getAllCourse = async (req, res, next) => {
   try {
-    const course = await courseServices.getAllCourse(req);
+    const course = await courseServices.getAllCourse(req.query);
     res.status(200).json({ message: "Course Fetched Successfully", course });
   } catch (err) {
     next(err);
@@ -22,7 +22,7 @@ const getAllCourse = async (req, res, next) => {
 
 const getCourseById = async (req, res, next) => {
   try {
-    const course = await courseServices.getCourseById(req);
+    const course = await courseServices.getCourseById(req.params);
     return res
       .status(200)
       .json({ message: "Course Fetched Successfully", course });
@@ -33,7 +33,7 @@ const getCourseById = async (req, res, next) => {
 
 const updateCourse = async (req, res, next) => {
   try {
-    const course = await courseServices.updateCourse(req);
+    const course = await courseServices.updateCourse(req.body,req.params);
     return res
       .status(200)
       .json({ message: "Course updated successfull", course });
@@ -44,7 +44,7 @@ const updateCourse = async (req, res, next) => {
 
 const deleteCourse = async (req, res, next) => {
   try {
-    const course = await courseServices.deleteCourse(req);
+    const course = await courseServices.deleteCourse(req.params);
     return res.status(200).json({ message: "Course deleted", course });
   } catch (err) {
     next(err);

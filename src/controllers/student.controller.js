@@ -2,7 +2,7 @@ const studentServices = require("../services/student.service");
 
 const createStudent = async (req, res, next) => {
   try {
-    const student = await studentServices.createStudent(req);
+    const student = await studentServices.createStudent(req.body);
 
     return res.status(201).json({
       message: "Registration Successfull",
@@ -15,7 +15,7 @@ const createStudent = async (req, res, next) => {
 
 const gettAllStudents = async (req, res, next) => {
   try {
-    const students = await studentServices.gettAllStudents(req);
+    const students = await studentServices.gettAllStudents(req.query);
     return res.status(200).json({
       message: "Students fetched successfull",
       students,
@@ -27,7 +27,7 @@ const gettAllStudents = async (req, res, next) => {
 
 const getStudentById = async (req, res, next) => {
   try {
-    const student = await studentServices.getStudentById(req);
+    const student = await studentServices.getStudentById(req.params);
     return res.status(200).json({
       message: "Student fetched",
       student,
@@ -39,7 +39,7 @@ const getStudentById = async (req, res, next) => {
 
 const updateStudent = async (req, res, next) => {
   try {
-    const student = await studentServices.updateStudent(req);
+    const student = await studentServices.updateStudent(req.body,req.params);
     return res
       .status(200)
       .json({ message: "Data successfully updated", student });
@@ -50,7 +50,7 @@ const updateStudent = async (req, res, next) => {
 
 const deleteStudentById = async (req, res, next) => {
   try {
-    const student = await studentServices.deleteStudentById(req)
+    const student = await studentServices.deleteStudentById(req.params)
     return res.status(200).json({
       message: "Student deleted successfully",
       student,

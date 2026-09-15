@@ -2,7 +2,7 @@ const examServices = require("../services/exam.service");
 
 const createExam = async (req,res,next) => {
   try {
-    const exam = await examServices.createExam(req)
+    const exam = await examServices.createExam(req.body)
     return res.status(201).json({ message: "Exam added successfully", exam });
   } catch (err) {
     next(err);
@@ -11,7 +11,7 @@ const createExam = async (req,res,next) => {
 
 const getAllExam = async (req,res,next) => {
   try {
-    const exam = await examServices.getAllExam(req)
+    const exam = await examServices.getAllExam(req.query)
     return res
       .status(200)
       .json({ message: "Exam fetch successfully", exam });
@@ -22,7 +22,7 @@ const getAllExam = async (req,res,next) => {
 
 const getExamById = async (req,res,next) => {
   try {
-    const exam = await examServices.getExamById(req)
+    const exam = await examServices.getExamById(req.params)
     return res.status(200).json({ message: "Exam details fetched", exam });
   } catch (err) {
     next(err);
@@ -31,7 +31,7 @@ const getExamById = async (req,res,next) => {
 
 const updateExam = async (req,res,next) => {
   try {
-    const exam = await examServices.updateExam(req)
+    const exam = await examServices.updateExam(req.body,req.params)
     return res.status(200).json({ message: "Exam details are updated", exam });
   } catch (err) {
     next(err);

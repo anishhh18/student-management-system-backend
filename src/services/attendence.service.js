@@ -2,8 +2,8 @@ const attendenceModel = require("../models/attendence.model");
 const studentModel = require("../models/student.model");
 const courseModel = require("../models/course.model");
 
-const createAttendence = async (data) => {
-  const { student, course, date, status } = data.body;
+const createAttendence = async (body) => {
+  const { student, course, date, status } = body;
     const isExistStudent = await studentModel.findById(student);
     if (!isExistStudent) {
     const error = new Error("Student Not Found");
@@ -35,12 +35,12 @@ const createAttendence = async (data) => {
     return attendence;
 };
 
-const getAttendence = async (data) => {
-  const page = Number(data.query.page) || 1
-  const limit = Number(data.query.limit) || 5
+const getAttendence = async (query) => {
+  const page = Number(query.page) || 1
+  const limit = Number(query.limit) || 5
   const skip = (page -1)*limit
   const filter = {}
-  const {student,course,status,date} = data.query;
+  const {student,course,status,date} = query;
   if (student) {
     filter.student = student;
   }
@@ -57,9 +57,9 @@ const getAttendence = async (data) => {
     return attendence;
 };
 
-const updateStatus = async (data)=>{
-  const {id} = data.params
-  const updatedValue = data.body
+const updateStatus = async (body,params)=>{
+  const updatedValue = body
+  const {id} = params
     if(updatedValue.status !== "absent" && updatedValue.status !== "present" &&
       updatedValue.status !== "late"
      ){
@@ -79,8 +79,8 @@ const updateStatus = async (data)=>{
     return attendence
 }
 
-const getAttendenceSummary = async (data)=>{
-  const{id} = data.params
+const getAttendenceSummary = async (params)=>{
+  const{id} = params
   const student = await studentModel.findById(id);
     if(!student){
       const error = new Error("Student Not Found");

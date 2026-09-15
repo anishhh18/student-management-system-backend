@@ -1,7 +1,7 @@
 const courseModel = require("../models/course.model");
 
-const addCourse = async (data) => {
-  const { courseId, name, department } = data.body;
+const addCourse = async (body) => {
+  const { courseId, name, department } = body;
 
   const isExist = await courseModel.findOne({ $or: [{ courseId }, { name }] });
   if (isExist) {
@@ -17,11 +17,11 @@ const addCourse = async (data) => {
   return course;
 };
 
-const getAllCourse = async (data) => {
-  const page = Number(data.query.page) || 1;
-  const limit = Number(data.query.limit) || 5;
+const getAllCourse = async (query) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 5;
   const skip = (page - 1) * limit;
-  const search = data.query.search;
+  const search = query.search;
   const filter = {};
   if (search) {
     filter.$or = [
@@ -30,12 +30,12 @@ const getAllCourse = async (data) => {
       { courseId: { $regex: search, $options: "i" } },
     ];
   }
-  const { sortBy, order } = data.query;
+  const { sortBy, order } = query;
   const sort = {};
   if (sortBy) {
     sort[sortBy] = order === "desc" ? -1 : 1;
   }
-  const { department, name } = data.query;
+  const { department, name } = query;
   if (department) {
     filter.department = department;
   }
@@ -50,8 +50,8 @@ const getAllCourse = async (data) => {
   return course;
 };
 
-const getCourseById = async (data) => {
-  const { id } = data.params;
+const getCourseById = async (params) => {
+  const { id } = params;
   const course = await courseModel.findById(id);
   if (!course) {
     const error = new Error("Course Not Found");
@@ -61,9 +61,9 @@ const getCourseById = async (data) => {
   return course;
 };
 
-const updateCourse = async (data) => {
-  const updatedValue = data.body;
-  const { id } = data.params;
+const updateCourse = async (body,params) => {
+  const updatedValue = body;
+  const { id } = params;
   const course = await courseModel.findByIdAndUpdate(id, updatedValue, {
     returnDocument: "after",
     runValidators: true,
@@ -76,8 +76,8 @@ const updateCourse = async (data) => {
   return course;
 };
 
-const deleteCourse = async (data) => {
-  const { id } = data.params;
+const deleteCourse = async (params) => {
+  const { id } = params;
   const course = await courseModel.findByIdAndDelete(id);
   if (!course) {
     const error = new Error("Course Not Found");

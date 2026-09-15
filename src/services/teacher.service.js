@@ -1,8 +1,8 @@
 const teacherModel = require("../models/teacher.model");
 
-const createTeacher = async (data) => {
+const createTeacher = async (body) => {
   const { teacherId, name, email, phone, subject, gender, department } =
-    data.body;
+    body;
   const isExists = await teacherModel.findOne({
     $or: [{ teacherId }, { email }],
   });
@@ -23,11 +23,11 @@ const createTeacher = async (data) => {
   return teacher;
 };
 
-const getAllTeacher = async (data) => {
-  const page = Number(data.query.page) || 1;
-  const limit = Number(data.query.limit) || 5;
+const getAllTeacher = async (query) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 5;
   const skip = (page - 1) * limit;
-  const search = data.query.search;
+  const search = query.search;
   const filter = {};
   if (search) {
     filter.$or = [
@@ -36,12 +36,12 @@ const getAllTeacher = async (data) => {
       { teacherId: { $regex: search, $options: "i" } },
     ];
   }
-  const { sortBy, order } = data.query;
+  const { sortBy, order } = query;
   const sort = {};
   if (sortBy) {
     sort[sortBy] = order === "desc" ? -1 : 1;
   }
-  const { department } = data.query;
+  const { department } = query;
   if (department) {
     filter.department = department;
   }
@@ -53,8 +53,8 @@ const getAllTeacher = async (data) => {
   return teacher;
 };
 
-const getTeacherById = async (data) => {
-  const { id } = data.params;
+const getTeacherById = async (params) => {
+  const { id } = params;
   const teacher = await teacherModel.findById(id);
   if (!teacher) {
     const error = new Error("Teacher Not Found");
@@ -64,9 +64,9 @@ const getTeacherById = async (data) => {
   return teacher;
 };
 
-const updateTeacher = async (data) => {
-  const updatedValue = data.body;
-  const { id } = data.params;
+const updateTeacher = async (body,params) => {
+  const updatedValue = body;
+  const { id } = params;
   const teacher = await teacherModel.findByIdAndUpdate(id, updatedValue, {
     returnDocument: "after",
     runValidators: true,
@@ -79,8 +79,8 @@ const updateTeacher = async (data) => {
   return teacher;
 };
 
-const deleteTeacherById = async (data) => {
-  const { id } = data.params;
+const deleteTeacherById = async (params) => {
+  const { id } = params;
   const teacher = await teacherModel.findByIdAndDelete(id);
   if (!teacher) {
     const error = new Error("Teacher Not Found");

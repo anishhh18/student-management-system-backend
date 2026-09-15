@@ -2,7 +2,7 @@ const teacherServices = require("../services/teacher.service");
 
 const createTeacher = async (req, res, next) => {
   try {
-    const teacher = await teacherServices.createTeacher(req);
+    const teacher = await teacherServices.createTeacher(req.body);
     return res
       .status(201)
       .json({ message: "Teacher registered successfully", teacher });
@@ -13,7 +13,7 @@ const createTeacher = async (req, res, next) => {
 
 const getAllTeacher = async (req, res, next) => {
   try {
-    const teacher = await teacherServices.getAllTeacher(req);
+    const teacher = await teacherServices.getAllTeacher(req.query);
     return res.status(200).json({ message: "teacher fetch successfully", teacher });
   } catch(err){
     next(err);
@@ -22,7 +22,7 @@ const getAllTeacher = async (req, res, next) => {
 
 const getTeacherById = async (req, res,next) => {
   try {
-    const teacher = await teacherServices.getTeacherById(req);
+    const teacher = await teacherServices.getTeacherById(req.params);
     return res
       .status(200)
       .json({ message: "Teacher Fetched Successfully", teacher });
@@ -33,7 +33,7 @@ const getTeacherById = async (req, res,next) => {
 
 const updateTeacher = async (req, res,next) => {
   try {
-    const teacher = await teacherServices.updateTeacher(req);
+    const teacher = await teacherServices.updateTeacher(req.body,req.params);
     return res
       .status(200)
       .json({ message: "Teacher Updated Successfully", teacher });
@@ -44,7 +44,7 @@ const updateTeacher = async (req, res,next) => {
 
 const deleteTeacherById = async (req, res,next) => {
   try {
-    const teacher = await teacherServices.deleteTeacherById(req);
+    const teacher = await teacherServices.deleteTeacherById(req.params);
     return res.status(200).json({
       message: "Teacher deleted successfully",
       teacher,
