@@ -2,6 +2,7 @@ const express = require("express");
 const studentController = require("../controllers/student.controller");
 const authMiddleware = require("../middleware/auth.middleware");
 const roleMiddleware = require("../middleware/role.middleware");
+const studentValidator = require("../validation/student.validation")
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.post(
   "/create",
   authMiddleware,
   roleMiddleware(["admin"]),
+  studentValidator.validateStudentCreate,
   studentController.createStudent
 );
 // GET API /api/student/
@@ -31,6 +33,7 @@ router.put(
   "/update/:id",
   authMiddleware,
   roleMiddleware(["admin"]),
+  studentValidator.validateStudentAtUpdate,
   studentController.updateStudent
 );
 // GET API /api/student/delete/:id
