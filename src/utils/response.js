@@ -1,8 +1,9 @@
-const successResponse = (res, statusCode, message, data = null) => {
+const successResponse = (res, statusCode, message, data = null,pagination = null) => {
   return res.status(statusCode).json({
     success: true,
     message,
-    data
+    data,
+    pagination
   });
 };
 

@@ -12,8 +12,8 @@ const createAttendence = async (req,res,next) => {
 
 const getAttendence = async (req,res,next) => {
   try {
-    const attendence = await attendenceServices.getAttendence(req.query)
-    return responses.successResponse(res, 201, "Attendence fetched successfully", attendence);
+    const result = await attendenceServices.getAttendence(req.query)
+    return responses.successResponse(res, 201, "Attendence fetched successfully", result.attendence,result.pagination);
   } catch (err) {
     next(err);
   }

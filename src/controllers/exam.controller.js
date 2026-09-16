@@ -12,8 +12,8 @@ const createExam = async (req,res,next) => {
 
 const getAllExam = async (req,res,next) => {
   try {
-    const exam = await examServices.getAllExam(req.query)
-    return responses.successResponse(res, 200, "Exam fetched successfully", exam);
+    const result = await examServices.getAllExam(req.query)
+    return responses.successResponse(res, 200, "Exam fetched successfully", result.exam,result.paginaion);
   } catch (err) {
     next(err);
   }

@@ -12,8 +12,8 @@ const createTeacher = async (req, res, next) => {
 
 const getAllTeacher = async (req, res, next) => {
   try {
-    const teacher = await teacherServices.getAllTeacher(req.query);
-    return responses.successResponse(res, 200, "Teacher fetched", teacher);
+    const result = await teacherServices.getAllTeacher(req.query);
+    return responses.successResponse(res, 200, "Teacher fetched", result.teacher,result.pagination);
   } catch(err){
     next(err);
   }

@@ -45,18 +45,23 @@ const gettAllStudents = async (data) => {
   if (sortBy) {
     sort[sortBy] = order === "desc" ? -1 : 1;
   }
+  const total = await studentModel.countDocuments(filter)
   const students = await studentModel
     .find(filter)
     .populate("course")
     .sort(sort)
     .skip(skip)
     .limit(limit);
-  if (students.length === 0) {
-    const error = new Error("Students Not Found");
-    error.statusCode = 404;
-    throw error;
-  }
-  return students;
+  const totalPages = (total/limit)
+  return {
+    students,
+    pagination:{
+      page,
+      limit,
+      total,
+      totalPages
+    }
+  };
 };
 
 const getStudentById = async (data) => {

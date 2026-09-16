@@ -42,12 +42,22 @@ const getAllCourse = async (query) => {
   if (name) {
     filter.name = name;
   }
+  const total = await courseModel.countDocuments(filter)
   const course = await courseModel
     .find(filter)
     .sort(sort)
     .skip(skip)
     .limit(limit);
-  return course;
+  const totalPages = (total/limit)
+  return {
+    course,
+    pagination:{
+      page,
+      limit,
+      total,
+      totalPages
+    }
+  };
 };
 
 const getCourseById = async (params) => {

@@ -53,8 +53,18 @@ const getAttendence = async (query) => {
   if (date) {
     filter.date = date;
   }
+  const total = await attendenceModel.countDocuments(filter)
     const attendence = await attendenceModel.find(filter).skip(skip).limit(limit);
-    return attendence;
+    const totalPages = (total/limit)
+    return {
+      attendence,
+      pagination:{
+        page,
+        limit,
+        total,
+        totalPages
+      }
+    };
 };
 
 const updateStatus = async (body,params)=>{

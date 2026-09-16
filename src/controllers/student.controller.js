@@ -13,8 +13,8 @@ const createStudent = async (req, res, next) => {
 
 const gettAllStudents = async (req, res, next) => {
   try {
-    const students = await studentServices.gettAllStudents(req.query);
-    return responses.successResponse(res, 200, "Student fetched", students);;
+    const result = await studentServices.gettAllStudents(req.query);
+    return responses.successResponse(res, 200, "Student fetched", result.students,result.pagination);;
   } catch (err) {
     next(err);
   }

@@ -45,12 +45,22 @@ const getAllTeacher = async (query) => {
   if (department) {
     filter.department = department;
   }
+  const total = await teacherModel.countDocuments(filter)
   const teacher = await teacherModel
     .find(filter)
     .sort(sort)
     .skip(skip)
     .limit(limit);
-  return teacher;
+  const totalPages = (total/limit)
+  return {
+    teacher,
+    pagination:{
+      page,
+      limit,
+      total,
+      totalPages
+    }
+  };
 };
 
 const getTeacherById = async (params) => {

@@ -36,13 +36,23 @@ const getAllExam = async (query) => {
   if (course) {
     filter.course = course;
   }
+  const total = await examModel.countDocuments(filter)
     const exam = await examModel
       .find(filter)
       .populate("course")
       .sort(sort)
       .skip(skip)
       .limit(limit);
-    return exam;
+    const totalPages = (total/limit)
+    return {
+      exam,
+      paginaion:{
+        page,
+        limit,
+        total,
+        totalPages,
+      }
+    };
 };
 
 const getExamById = async (params) => {

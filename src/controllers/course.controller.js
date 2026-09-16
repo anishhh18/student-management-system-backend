@@ -12,8 +12,8 @@ const addCourse = async (req, res, next) => {
 
 const getAllCourse = async (req, res, next) => {
   try {
-    const course = await courseServices.getAllCourse(req.query);
-    return responses.successResponse(res, 200, "Course fetched successfully", course);
+    const result = await courseServices.getAllCourse(req.query);
+    return responses.successResponse(res, 200, "Course fetched successfully", result.course,result.pagination);
   } catch (err) {
     next(err);
   }
