@@ -1,11 +1,10 @@
 const attendenceServices = require("../services/attendence.service")
+const responses = require("../utils/response");
 
 const createAttendence = async (req,res,next) => {
   try {
     const attendence = await attendenceServices.createAttendence(req.body)
-    return res
-      .status(201)
-      .json({ message: "Your attendence has been marked", attendence });
+    return responses.successResponse(res, 201, "Attendence created successfully", attendence);
   } catch (err) {
     next(err);
   }
@@ -14,7 +13,7 @@ const createAttendence = async (req,res,next) => {
 const getAttendence = async (req,res,next) => {
   try {
     const attendence = await attendenceServices.getAttendence(req.query)
-    return res.status(200).json({ message: "Attendence fetched", attendence });
+    return responses.successResponse(res, 201, "Attendence fetched successfully", attendence);
   } catch (err) {
     next(err);
   }
@@ -23,7 +22,7 @@ const getAttendence = async (req,res,next) => {
 const updateStatus = async (req,res,next)=>{
   try{
     const attendence = await attendenceServices.updateStatus(req.body,req.params)
-    return res.status(200).json({message:"Status Updated",attendence})
+    return responses.successResponse(res, 201, "Attendence fetched successfully", attendence);
   }catch(err){
     next(err)
   }
@@ -32,9 +31,7 @@ const updateStatus = async (req,res,next)=>{
 const getAttendenceSummary = async (req,res,next)=>{
   try{
     const attendence = await attendenceServices.getAttendenceSummary(req.params)
-    return res.status(200).json({
-      attendence
-    });
+    return responses.successResponse(res, 201, "Attendence summary", attendence);
   }catch(err){
     next(err)
   }

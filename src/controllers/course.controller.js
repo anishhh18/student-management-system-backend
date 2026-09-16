@@ -1,11 +1,10 @@
 const courseServices = require("../services/course.service");
+const responses = require("../utils/response");
 
 const addCourse = async (req, res, next) => {
   try {
     const course = await courseServices.addCourse(req.body);
-    return res
-      .status(201)
-      .json({ message: "Course Added Successfully", course });
+    return responses.successResponse(res, 201, "Course created successfully", course);
   } catch (err) {
     next(err);
   }
@@ -14,7 +13,7 @@ const addCourse = async (req, res, next) => {
 const getAllCourse = async (req, res, next) => {
   try {
     const course = await courseServices.getAllCourse(req.query);
-    res.status(200).json({ message: "Course Fetched Successfully", course });
+    return responses.successResponse(res, 200, "Course fetched successfully", course);
   } catch (err) {
     next(err);
   }
@@ -23,9 +22,7 @@ const getAllCourse = async (req, res, next) => {
 const getCourseById = async (req, res, next) => {
   try {
     const course = await courseServices.getCourseById(req.params);
-    return res
-      .status(200)
-      .json({ message: "Course Fetched Successfully", course });
+    return responses.successResponse(res, 200, "Course fetched successfully", course);
   } catch (err) {
     next(err);
   }
@@ -34,9 +31,7 @@ const getCourseById = async (req, res, next) => {
 const updateCourse = async (req, res, next) => {
   try {
     const course = await courseServices.updateCourse(req.body,req.params);
-    return res
-      .status(200)
-      .json({ message: "Course updated successfull", course });
+    return responses.successResponse(res, 200, "Course updated successfully", course);
   } catch (err) {
     next(err);
   }
@@ -45,7 +40,7 @@ const updateCourse = async (req, res, next) => {
 const deleteCourse = async (req, res, next) => {
   try {
     const course = await courseServices.deleteCourse(req.params);
-    return res.status(200).json({ message: "Course deleted", course });
+    return responses.successResponse(res, 200, "Course deleted successfully", course);
   } catch (err) {
     next(err);
   }

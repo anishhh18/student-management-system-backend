@@ -1,9 +1,10 @@
 const examServices = require("../services/exam.service");
+const responses = require("../utils/response");
 
 const createExam = async (req,res,next) => {
   try {
     const exam = await examServices.createExam(req.body)
-    return res.status(201).json({ message: "Exam added successfully", exam });
+    return responses.successResponse(res, 201, "Exam added successfully", exam);
   } catch (err) {
     next(err);
   }
@@ -12,9 +13,7 @@ const createExam = async (req,res,next) => {
 const getAllExam = async (req,res,next) => {
   try {
     const exam = await examServices.getAllExam(req.query)
-    return res
-      .status(200)
-      .json({ message: "Exam fetch successfully", exam });
+    return responses.successResponse(res, 200, "Exam fetched successfully", exam);
   } catch (err) {
     next(err);
   }
@@ -23,7 +22,7 @@ const getAllExam = async (req,res,next) => {
 const getExamById = async (req,res,next) => {
   try {
     const exam = await examServices.getExamById(req.params)
-    return res.status(200).json({ message: "Exam details fetched", exam });
+    return responses.successResponse(res, 200, "Exam fetched successfully", exam);
   } catch (err) {
     next(err);
   }
@@ -32,7 +31,7 @@ const getExamById = async (req,res,next) => {
 const updateExam = async (req,res,next) => {
   try {
     const exam = await examServices.updateExam(req.body,req.params)
-    return res.status(200).json({ message: "Exam details are updated", exam });
+    return responses.successResponse(res, 200, "Exam updated successfully", exam);
   } catch (err) {
     next(err);
   }
