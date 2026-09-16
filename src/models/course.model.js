@@ -10,15 +10,22 @@ const courseSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    index:true
   },
   department: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    index: true
   }
 }, {
   timestamps: true
+});
+
+courseSchema.index({
+  department: 1,
+  name: 1
 });
 
 

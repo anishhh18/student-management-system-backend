@@ -1,8 +1,8 @@
-const attendenceModel = require("../models/attendence.model");
+const attendanceModel = require("../models/attendance.model");
 const studentModel = require("../models/student.model");
 const courseModel = require("../models/course.model");
 
-const createAttendence = async (body) => {
+const createattendance = async (body) => {
   const { student, course, date, status } = body;
     const isExistStudent = await studentModel.findById(student);
     if (!isExistStudent) {
@@ -16,26 +16,26 @@ const createAttendence = async (body) => {
     error.statusCode = 404;
     throw error;
   }
-    const alreadyMarked = await attendenceModel.findOne({
+    const alreadyMarked = await attendanceModel.findOne({
       student,
       course,
       date,
     });
     if (alreadyMarked) {
-      const error = new Error("Attendence Is Already Marked");
+      const error = new Error("attendance Is Already Marked");
     error.statusCode = 409;
     throw error;
     }
-    const attendence = await attendenceModel.create({
+    const attendance = await attendanceModel.create({
       student,
       course,
       date,
       status,
     });
-    return attendence;
+    return attendance;
 };
 
-const getAttendence = async (query) => {
+const getattendance = async (query) => {
   const page = Number(query.page) || 1
   const limit = Number(query.limit) || 5
   const skip = (page -1)*limit
@@ -53,11 +53,11 @@ const getAttendence = async (query) => {
   if (date) {
     filter.date = date;
   }
-  const total = await attendenceModel.countDocuments(filter)
-    const attendence = await attendenceModel.find(filter).skip(skip).limit(limit);
-    const totalPages = (total/limit)
+  const total = await attendanceModel.countDocuments(filter)
+    const attendance = await attendanceModel.find(filter).skip(skip).limit(limit);
+    const totalPages = Math.ceil(total/limit)
     return {
-      attendence,
+      attendance,
       pagination:{
         page,
         limit,
@@ -77,19 +77,19 @@ const updateStatus = async (body,params)=>{
     error.statusCode = 400;
     throw error;
      }
-    const attendence = await attendenceModel.findByIdAndUpdate(id,updatedValue,{
+    const attendance = await attendanceModel.findByIdAndUpdate(id,updatedValue,{
       returnDocument: "after",
       runValidators: true,
     })
-    if(!attendence){
-      const error = new Error("Attendence Not Found");
+    if(!attendance){
+      const error = new Error("attendance Not Found");
     error.statusCode = 404;
     throw error;
     }
-    return attendence
+    return attendance
 }
 
-const getAttendenceSummary = async (params)=>{
+const getattendanceSummary = async (params)=>{
   const{id} = params
   const student = await studentModel.findById(id);
     if(!student){
@@ -97,11 +97,11 @@ const getAttendenceSummary = async (params)=>{
     error.statusCode = 404;
     throw error;
     }
-    const attendence = await attendenceModel.find({student:id})
+    const attendance = await attendanceModel.find({student:id})
     let present = 0
     let absent = 0
     let late = 0
-    attendence.forEach((record) => {
+    attendance.forEach((record) => {
       if (record.status === "present") {
         present++;
       }
@@ -113,7 +113,7 @@ const getAttendenceSummary = async (params)=>{
       }
     });
     const totalClasses = present+absent+late
-    const attendencePercentage = totalClasses === 0 ? 0 : ((present + late) / totalClasses) * 100
+    const attendancePercentage = totalClasses === 0 ? 0 : ((present + late) / totalClasses) * 100
     return ({
       student: student.name,
       totalClasses,
@@ -121,11 +121,11 @@ const getAttendenceSummary = async (params)=>{
       absent,
       late,
       attendancePercentage: Number(
-        attendencePercentage.toFixed(2)
+        attendancePercentage.toFixed(2)
       ),
     });
 
 }
 
 
-module.exports = { createAttendence,getAttendence,updateStatus,getAttendenceSummary };
+module.exports = { createattendance,getattendance,updateStatus,getattendanceSummary };

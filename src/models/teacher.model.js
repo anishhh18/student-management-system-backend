@@ -60,6 +60,11 @@ const teacherSchema = new mongoose.Schema(
   }
 );
 
+teacherSchema.index({
+  department: 1,
+  subject: 1
+});
+
 const teacherModel = mongoose.model("teacher", teacherSchema);
 
 module.exports = teacherModel;

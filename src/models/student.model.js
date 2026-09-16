@@ -45,7 +45,8 @@ const studentSchema = new mongoose.Schema(
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "courses",
-      required: true
+      required: true,
+      index:true
     },
     department: {
       type: String,
@@ -66,6 +67,11 @@ const studentSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+studentSchema.index({
+  course:1,
+  status:1
+})
 
 const studentModel = mongoose.model("student", studentSchema);
 

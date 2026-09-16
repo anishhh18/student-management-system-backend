@@ -1,4 +1,4 @@
-const validateAttendenceCreate = (req,res,next)=>{
+const validateattendanceCreate = (req,res,next)=>{
   const {student,date,course,status} = req.body
   if(!student||!date||!course||!status){
     const error = new Error("All fields are required")
@@ -8,7 +8,7 @@ const validateAttendenceCreate = (req,res,next)=>{
   next()
 }
 
-const validateAttendenceUpdate = (req,res,next)=>{
+const validateattendanceUpdate = (req,res,next)=>{
   const {status} = req.body
   if(status === ""){
     const error = new Error("Status is required")
@@ -23,4 +23,4 @@ const validateAttendenceUpdate = (req,res,next)=>{
   next()
 }
 
-module.exports = {validateAttendenceCreate,validateAttendenceUpdate}
+module.exports = {validateattendanceCreate,validateattendanceUpdate}

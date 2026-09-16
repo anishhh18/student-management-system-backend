@@ -48,11 +48,12 @@ const gettAllStudents = async (data) => {
   const total = await studentModel.countDocuments(filter)
   const students = await studentModel
     .find(filter)
+    .explain("executionStats")
     .populate("course")
     .sort(sort)
     .skip(skip)
     .limit(limit);
-  const totalPages = (total/limit)
+  const totalPages = Math.ceil(total/limit)
   return {
     students,
     pagination:{

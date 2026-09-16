@@ -43,7 +43,7 @@ const getAllExam = async (query) => {
       .sort(sort)
       .skip(skip)
       .limit(limit);
-    const totalPages = (total/limit)
+    const totalPages = Math.ceil(total/limit)
     return {
       exam,
       paginaion:{

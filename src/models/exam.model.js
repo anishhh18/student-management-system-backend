@@ -11,11 +11,13 @@ const examSchema = new mongoose.Schema({
       type: String,
       required: true,
       trim: true,
+      index: true
     },
     course: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref:"courses"
+      ref:"courses",
+      index: true
     },
     examDate: {
       type: Date,
@@ -30,6 +32,10 @@ const examSchema = new mongoose.Schema({
     timestamps: true,
   })
 
+examSchema.index({
+  course: 1,
+  examDate: 1
+});
 
 const examModel = mongoose.model("exams",examSchema)
 
